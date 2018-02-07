@@ -9,6 +9,7 @@ local function create(name)
         string.format('http://%s/%s/networks/create', HOST, API),
         json.encode({
             Name = tostring(name),
+            Driver = 'overlay',
             CheckDuplicate = true,
         }),
         {
