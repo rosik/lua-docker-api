@@ -30,6 +30,26 @@ local function ls()
     end
 end
 
+-- https://docs.docker.com/engine/api/v1.35/#operation/NodeInspect
+local function inspect(id)
+    local r = curl:get(
+        string.format('http://%s/%s/nodes/%s', HOST, API, id),
+        {
+            unix_socket = SOCK,
+        }
+    )
+    
+    assert_json(r)
+    if r.status == 200 then
+        return json.decode(r.body)
+    elseif r.status == 404 then
+        return nil
+    else
+        error({r.status, json.decode(r.body)})
+    end
+end
+
 return {
     ls = ls,
+    inspect = inspect,
 }

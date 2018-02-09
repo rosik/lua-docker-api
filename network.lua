@@ -4,14 +4,10 @@ local HOST = 'localhost'
 local SOCK = '/var/run/docker.sock'
 local API = 'v1.35'
 
-local function create(name)
+local function create(params)
     local r = curl:post(
         string.format('http://%s/%s/networks/create', HOST, API),
-        json.encode({
-            Name = tostring(name),
-            Driver = 'overlay',
-            CheckDuplicate = true,
-        }),
+        json.encode(params),
         {
             unix_socket = SOCK,
             headers = {['Content-Type'] = 'application/json'}
