@@ -1,5 +1,6 @@
 local json = require('json')
 local curl = require('http.client').new()
+local utils = require('dockerapi.utils')
 local HOST = 'localhost'
 local SOCK = '/var/run/docker.sock'
 local API = 'v1.35'
@@ -33,10 +34,7 @@ local function inspect(name)
         }
     )
     
-    if r.headers['content-type'] ~= 'application/json' then
-        error("Server replied with unexpected Content-Type '" .. r.headers['content-type'] .. "'")
-    end
-
+    utils.assert_json(r)
     if r.status == 200 then
         return json.decode(r.body)
     elseif r.status == 404 then
