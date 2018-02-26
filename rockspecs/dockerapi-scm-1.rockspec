@@ -1,12 +1,12 @@
-package = 'tarantool-docker-api'
+package = 'dockerapi'
 version = 'scm-1'
 source  = {
-    url    = 'git://github.com/rosik/tarantool-docker-api.git';
+    url    = 'git://github.com/rosik/tarantool-dockerapi.git';
     branch = 'master';
 }
 description = {
     summary  = "Tarantool + Docker = ❤";
-    homepage = 'https://github.com/rosik/tarantool-docker-api';
+    homepage = 'https://github.com/rosik/tarantool-dockerapi';
     maintainer = "Yaroslav Dynnikov <yaroslav.dynnikov@gmail.com>";
     license  = 'BSD2';
 }
