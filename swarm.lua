@@ -1,28 +1,30 @@
 local json = require('json')
 local curl = require('http.client').new()
 local utils = require('dockerapi.utils')
-local HOST = 'localhost'
-local SOCK = '/var/run/docker.sock'
-local API = 'v1.35'
 
-local function inspect()
+-- https://docs.docker.com/engine/api/v1.35/#operation/SwarmInspect
+local function inspect(url, unix_socket)
     local r = curl:get(
-        string.format('http://%s/%s/swarm', HOST, API),
-        {
-            unix_socket = SOCK,
-        }
+        string.format('%s/swarm', url),
+        {unix_socket = unix_socket}
     )
     
-    utils.assert_json(r)
-    if r.status == 200 then
-        return json.decode(r.body)
-    elseif r.status == 404 then
-        return nil
+    local body, err = utils.get_json_body(r)
+    if err then
+        return nil, err
+    elseif r.status ~= 200 then
+        return nil, body.message
     else
-        error(json.decode(r.body)['message'])
+        return body
     end
 end
 
-return {
-    inspect = inspect,
-}
+local swarm = {}
+
+function swarm.init(url, unix_socket)
+    return {
+        inspect = function(...) return inspect(url, unix_socket, ...) end,
+    }
+end
+
+return swarm
