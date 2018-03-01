@@ -10,7 +10,7 @@ function utils.get_json_body(r)
     local ct = headers['content-type']
     if ct == nil then
         return nil, "Server did not provide Content-Type headers"
-    elseif ct ~= content_type then
+    elseif ct ~= 'application/json' then
         return nil, "Server replied with unexpected Content-Type '" .. ct .. "'"
     end
 
